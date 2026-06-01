@@ -1,40 +1,26 @@
-function generarDatos(frase, autor){
 
-    const contenedorPosts = document.querySelector('#post')
+//Nombrar variables del botón y los elementos para mostrar
+const boton = document.getElementById(`btnPersonaje`);
+const nombre = document.getElementById(`nombre`);
+const imagen = document.getElementById(`imagen`);
+const estado = document.getElementById(`estado`);
 
-    const listarObjetos = document.createElement('ul')
+//Evento al click
+boton.addEventListener(`click`, () => {
+    const url = `https://rickandmortyapi.com/api/character/1`
 
-    const items = document.createElement('li')
+    //Consumir la API con fetch
+    fetch(url)
+    .then(response => response.json()) //Convertir la respuesta a JSON
+    .then(data => {
+        //Mostrar los dato en el HTML
+        nombre.innerText = `Nombre: ${data.name}`;
+        imagen.src = data.image;
+        imagen.style.display = `block` //para mostrar la imagen
+        estado.innerText = `Estado: ${data.status}`;
 
-
-    // texto
-    items.textContent = `${frase} / ${autor}`
-
-
-    // agregar elementos
-    listarObjetos.appendChild(items)
-
-
-    contenedorPosts.appendChild(listarObjetos)
+        console.log(data); //para ver lo que trae la API
+    })
+    .catch(error => console.error(`Error al obtener datos: `, error));
 }
-
-
-fetch('https://dummyjson.com/quotes/random')
-
-.then(response => response.json())
-
-.then(datos => {
-
-    generarDatos(
-        datos.quote,
-        datos.author
-    )
-
-})
-
-.catch(error => console.log(error))
-
-
-const boton = document.querySelector('#btnGenerar')
-
-boton.addEventListener('click', generarDatos)
+)
